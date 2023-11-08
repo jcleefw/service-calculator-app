@@ -7,11 +7,15 @@ class Service
     @options = options
   end
 
-  def total_price(quantity, selected_options)
+  def total_price(quantity = 1, selected_options = [])
     total = base_price
     selected_options.each do |option|
       sym_option = option.to_sym
-      total +=  @options[sym_option]
+    
+      if @options[sym_option]
+        total +=  @options[sym_option]
+      end
+     
     end
     total *= quantity
   end
