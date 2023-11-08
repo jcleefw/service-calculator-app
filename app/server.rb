@@ -49,39 +49,52 @@ class App < Sinatra::Base
   # Endpoint to calculated the total pricing of services required with a JSON object
   post '/quote_pricing' do
     content_type :json
-    requested_services = JSON.parse(request.body.read)
 
-    subtotal = 0
-    discount = 0  # hardcoded for now
-    services_unavailable = []
+    begin
+      requested_services = JSON.parse(request.body.read)
+      puts requested_services
 
-    line_items = requested_services.map do |requested_service|
-      begin
-        service_name = ServiceEnum.const_get(requested_service["service"].upcase)
-        klass = Object.const_get(service_name).new
-        total = klass.total_price(requested_service["quantity"], requested_service["extras"])
-        subtotal += total
-        
-        {
-          service: requested_service["service"],
-          quantity: requested_service["quantity"],
-          total: total
-        }
+      if requested_services.is_a? Array
 
-      rescue 
-        services_unavailable << requested_service["service"]
+        subtotal = 0
+        discount = 0  # hardcoded for now
+        services_unavailable = []
+
+        line_items = requested_services.map do |requested_service|
+          begin
+            service_name = ServiceEnum.const_get(requested_service["service"].upcase)
+            klass = Object.const_get(service_name).new
+            total = klass.total_price(requested_service["quantity"], requested_service["extras"])
+            subtotal += total
+            
+            {
+              service: requested_service["service"],
+              quantity: requested_service["quantity"],
+              total: total
+            }
+
+          rescue 
+            services_unavailable << requested_service["service"]
+          end
+        end
+
+        return {
+          line_items: line_items,
+          line_items_count: line_items.count,
+          subtotal: subtotal,
+          currency: "AUD", # hardcoded for now
+          discount: discount, # hardcoded for now
+          total: subtotal - discount,
+          services_unavailable: services_unavailable
+        }.to_json
+      else 
+        status 500
+        { error: 'Invalid data format. Data should be an array of services' }.to_json
       end
+    rescue JSON::ParserError
+      status 500
+      { error: 'Error reading services data.' }.to_json
     end
-    {
-      line_items: line_items,
-      line_items_count: line_items.count,
-      subtotal: subtotal,
-      currency: "AUD", # hardcoded for now
-      discount: discount, # hardcoded for now
-      total: subtotal - discount,
-      services_unavailable: services_unavailable
-    }.to_json
-    
   end
 
 end
