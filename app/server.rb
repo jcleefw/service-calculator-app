@@ -1,5 +1,4 @@
 require 'sinatra'
-require_relative 'services/service'
 require_relative 'services/photo_retouching_service'
 require_relative 'services/floor_plan_service.rb'
 require_relative 'services/drone_video_service.rb'
@@ -34,6 +33,7 @@ class App < Sinatra::Base
       service = ServiceEnum.const_get(params['service'].upcase)
       klass = Object.const_get(service).new
       quantity = params['quantity'].to_i
+
       # ensure no white space in between extras provided
       options = params['extras'].split(',').map { |opt| opt.strip }
       total = klass.total_price(quantity, options)
@@ -53,6 +53,7 @@ class App < Sinatra::Base
 
     subtotal = 0
     discount = 0  # hardcoded for now
+    services_unavailable = []
 
     line_items = requested_services.map do |requested_service|
       begin
@@ -67,10 +68,8 @@ class App < Sinatra::Base
           total: total
         }
 
-      rescue JSON::ParserError
-        # TODO: instead of invalid, output  which service is unavailable
-        status 400
-        { error: 'Invalid JSON data for options.' }.to_json
+      rescue 
+        services_unavailable << requested_service["service"]
       end
     end
     {
@@ -79,7 +78,8 @@ class App < Sinatra::Base
       subtotal: subtotal,
       currency: "AUD", # hardcoded for now
       discount: discount, # hardcoded for now
-      total: subtotal - discount
+      total: subtotal - discount,
+      services_unavailable: services_unavailable
     }.to_json
     
   end
