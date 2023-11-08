@@ -7,4 +7,12 @@ class Service
     @options = options
   end
 
+  def total_price(quantity, selected_options)
+    total = base_price
+    selected_options.each do |option|
+      sym_option = option.to_sym
+      total +=  @options[sym_option]
+    end
+    total *= quantity
+  end
 end
