@@ -13,38 +13,32 @@ class App < Sinatra::Base
   get '/services' do
     content_type :json
     
-    return {
-      photo_retouching: {
-        base_price: 2.50,
-        options: {
-          background_removal: 0.5,
-          add_watermark: 0.30,
-        }
-      }, 
-      floor_plan: {
-        base_price: 15,
-        options: {
-          "3d_layout": 15,
-          add_furniture: 10,
-          add_color: 5
-        }
-      },
-      drone_video: {
-        base_price: 50,
-        customer_branded: 10,
-        scenic_footage: 20
-      }
-    }.to_json
+    begin
+      # Read data from the services.json file
+      services_data = JSON.parse(File.read('./mocks/services.json'))
+      # Replace 'services.json' with the actual path to your JSON file
+  
+      # Return the parsed data as a JSON response
+      services_data.to_json
+    rescue JSON::ParserError, Errno::ENOENT
+      status 500
+      { error: 'Error reading services data.' }.to_json
+    end
   end
 
-  # to calculate a photo retouching service and it's total price
+  # Endpoint to Calculate a selected service and it's total price
   # based on quantity and additional options
+  # request example: GET __URL__/calculate_single_service?quantity=5&extras=add_watermark,background_removal&service=photo_retouching
   get '/calculate_single_service' do
     begin
-      service = DroneVideoService.new
-      total = service.total_price(1, ["something invalid"])
+      service = ServiceEnum.const_get(params['service'].upcase)
+      klass = Object.const_get(service).new
+      quantity = params['quantity'].to_i
+      # ensure no white space in between extras provided
+      options = params['extras'].split(',').map { |opt| opt.strip }
+      total = klass.total_price(quantity, options)
 
-      "Services created: #{service.name}, Total Price: $#{total}"
+      "Services quote: #{klass.name}, Total Price: $#{total}"
     rescue => error
       # TODO: handle this 
       puts "oh oh"
@@ -52,6 +46,7 @@ class App < Sinatra::Base
     end
   end
 
+  # Endpoint to calculated the total pricing of services required with a JSON object
   post '/quote_pricing' do
     content_type :json
     requested_services = JSON.parse(request.body.read)
