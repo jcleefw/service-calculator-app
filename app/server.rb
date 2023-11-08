@@ -1,8 +1,8 @@
 require 'sinatra'
-require_relative 'modals/service'
-require_relative 'modals/photo_retouching_service'
-require_relative 'modals/floor_plan_service.rb'
-require_relative 'modals/drone_video_service.rb'
+require_relative 'services/service'
+require_relative 'services/photo_retouching_service'
+require_relative 'services/floor_plan_service.rb'
+require_relative 'services/drone_video_service.rb'
 
 class App < Sinatra::Base
   get '/' do
