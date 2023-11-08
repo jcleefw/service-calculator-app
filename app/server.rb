@@ -3,6 +3,7 @@ require_relative 'services/service'
 require_relative 'services/photo_retouching_service'
 require_relative 'services/floor_plan_service.rb'
 require_relative 'services/drone_video_service.rb'
+require_relative 'service_enum.rb'
 
 class App < Sinatra::Base
   get '/' do
@@ -49,6 +50,43 @@ class App < Sinatra::Base
       puts "oh oh"
       puts error.message
     end
+  end
+
+  post '/quote_pricing' do
+    content_type :json
+    requested_services = JSON.parse(request.body.read)
+
+    subtotal = 0
+    discount = 0  # hardcoded for now
+
+    line_items = requested_services.map do |requested_service|
+      begin
+        service_name = ServiceEnum.const_get(requested_service["service"].upcase)
+        klass = Object.const_get(service_name).new
+        total = klass.total_price(requested_service["quantity"], requested_service["extras"])
+        subtotal += total
+        
+        {
+          service: requested_service["service"],
+          quantity: requested_service["quantity"],
+          total: total
+        }
+
+      rescue JSON::ParserError
+        # TODO: instead of invalid, output  which service is unavailable
+        status 400
+        { error: 'Invalid JSON data for options.' }.to_json
+      end
+    end
+    {
+      line_items: line_items,
+      line_items_count: line_items.count,
+      subtotal: subtotal,
+      currency: "AUD", # hardcoded for now
+      discount: discount, # hardcoded for now
+      total: subtotal - discount
+    }.to_json
+    
   end
 
 end
