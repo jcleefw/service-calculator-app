@@ -1,0 +1,17 @@
+[
+  {
+    "service": "photo_retouching",
+    "extras": ["background_removal"],
+    "quantity": 5
+  },
+  {
+    "service": "floor_plan",
+    "extras": [],
+    "quantity": 1
+  },
+  {
+    "service": "drone_video",
+    "extras": ["branded", "scenic"],
+    "quantity": 1
+  }
+]

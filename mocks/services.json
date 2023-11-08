@@ -1,0 +1,15 @@
+{
+  "photo_retouching": {
+    "base_price": 2.5,
+    "options": { "background_removal": 0.5, "add_watermark": 0.3 }
+  },
+  "floor_plan": {
+    "base_price": 15,
+    "options": { "3d_layout": 15, "add_furniture": 10, "add_color": 5 }
+  },
+  "drone_video": {
+    "base_price": 50,
+    "customer_branded": 10,
+    "scenic_footage": 20
+  }
+}
