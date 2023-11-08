@@ -51,6 +51,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  rack (~> 2.2)
   sinatra-activerecord
 
 BUNDLED WITH
