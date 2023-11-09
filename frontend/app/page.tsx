@@ -18,6 +18,27 @@ export default async function Home() {
   return (
     <main>
       <h1>Ask us for a quote</h1>
+      <form name={formName} action="">
+        {servicesArray.length > 0 &&
+          servicesArray.map(([serviceName, value], idx) => {
+            const serviceOptions = Object.entries(value.options).map(
+              ([optionKey, optionValue]) => {
+                return { label: optionKey, value: optionValue }
+              }
+            )
+
+            return (
+              <div key={`service-${serviceName}`}>
+                <ServiceCard
+                  serviceName={serviceName}
+                  options={serviceOptions}
+                  formName={formName}
+                  idx={idx}
+                />
+              </div>
+            )
+          })}
+      </form>
     </main>
   )
 }

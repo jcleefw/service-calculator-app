@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './form.scss';
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background: #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background: #222;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: var(--background);
+}
+
+.contained {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+main {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  @apply flex flex-col items-center contained p-12 bg-white;
+}
+
+h1 {
+  @apply font-bold text-2xl text-gray-600 dark:text-purple-300 mb-6;
+}
+
+h2 {
+  @apply font-bold text-xl text-blue-600 dark:to-blue-200;
+}
+
+h3 {
+  @apply font-semibold text-red-400 dark:text-red-200 capitalize;
+}
+
+h4 {
+  @apply text-red-400 dark:text-red-300 capitalize;
+}
+
+button {
+  @apply text-xs border p-2 border-gray-600 dark:border-gray-200;
+}
+
+.card {
+  @apply flex mb-4 flex-col gap-4 
+  border border-gray-600 dark:border-gray-200
+  p-4;
+  min-width: 500px;
+}
+
+button.primary {
+  @apply bg-gray-600 dark:bg-gray-200
+   text-white dark:text-gray-800;
+}
