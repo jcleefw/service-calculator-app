@@ -1,5 +1,7 @@
 require 'sinatra'
 require_relative 'helpers'
+require_relative 'quote'
+
 
 class App < Sinatra::Base
   get '/' do
@@ -49,16 +51,17 @@ class App < Sinatra::Base
       requested_services = JSON.parse(request.body.read)
   
       if requested_services.is_a? Array
-        subtotal, line_items, services_unavailable = calculate_related_item_details(requested_services)
+
+        quote = Quote.new(requested_services)
   
         return {
-          line_items: line_items,
-          line_items_count: line_items.length,
-          subtotal: subtotal,
-          currency: "AUD", # hardcoded for now
+          line_items: quote.line_items,
+          line_items_count: quote.line_items_count,
+          subtotal: quote.subtotal,
+          currency: quote.currency, # hardcoded for now
           discount: 0,      # hardcoded for now
-          total: subtotal,
-          services_unavailable: services_unavailable
+          total: quote.total,
+          services_unavailable: quote.services_unavailable
         }.to_json
       else
         status 400
