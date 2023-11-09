@@ -1,8 +1,5 @@
 require 'sinatra'
-require_relative 'services/photo_retouching_service'
-require_relative 'services/floor_plan_service.rb'
-require_relative 'services/drone_video_service.rb'
-require_relative 'service_enum.rb'
+require_relative 'helpers'
 
 class App < Sinatra::Base
   get '/' do
@@ -15,7 +12,6 @@ class App < Sinatra::Base
     begin
       # Read data from the services.json file
       services_data = JSON.parse(File.read('./mocks/services.json'))
-      # Replace 'services.json' with the actual path to your JSON file
   
       # Return the parsed data as a JSON response
       services_data.to_json
@@ -30,8 +26,7 @@ class App < Sinatra::Base
   # request example: GET __URL__/calculate_single_service?quantity=5&extras=add_watermark,background_removal&service=photo_retouching
   get '/calculate_single_service' do
     begin
-      service = ServiceEnum.const_get(params['service'].upcase)
-      klass = Object.const_get(service).new
+      klass = klass_assign(params['service'])
       quantity = params['quantity'].to_i
 
       # ensure no white space in between extras provided
@@ -49,46 +44,24 @@ class App < Sinatra::Base
   # Endpoint to calculated the total pricing of services required with a JSON object
   post '/quote_pricing' do
     content_type :json
-
+  
     begin
       requested_services = JSON.parse(request.body.read)
-      puts requested_services
-
+  
       if requested_services.is_a? Array
-
-        subtotal = 0
-        discount = 0  # hardcoded for now
-        services_unavailable = []
-
-        line_items = requested_services.map do |requested_service|
-          begin
-            service_name = ServiceEnum.const_get(requested_service["service"].upcase)
-            klass = Object.const_get(service_name).new
-            total = klass.total_price(requested_service["quantity"], requested_service["extras"])
-            subtotal += total
-            
-            {
-              service: requested_service["service"],
-              quantity: requested_service["quantity"],
-              total: total
-            }
-
-          rescue 
-            services_unavailable << requested_service["service"]
-          end
-        end
-
+        subtotal, line_items, services_unavailable = calculate_related_item_details(requested_services)
+  
         return {
           line_items: line_items,
-          line_items_count: line_items.count,
+          line_items_count: line_items.length,
           subtotal: subtotal,
           currency: "AUD", # hardcoded for now
-          discount: discount, # hardcoded for now
-          total: subtotal - discount,
+          discount: 0,      # hardcoded for now
+          total: subtotal,
           services_unavailable: services_unavailable
         }.to_json
-      else 
-        status 500
+      else
+        status 400
         { error: 'Invalid data format. Data should be an array of services' }.to_json
       end
     rescue JSON::ParserError
@@ -96,5 +69,4 @@ class App < Sinatra::Base
       { error: 'Error reading services data.' }.to_json
     end
   end
-
 end
