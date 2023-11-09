@@ -6,3 +6,5 @@ source "https://rubygems.org"
 gem 'activerecord', require: 'active_record'
 gem 'sinatra-activerecord', :require => 'sinatra/activerecord'
 gem "rack", "~> 2.2"
+
+gem "rspec", "~> 3.12"
