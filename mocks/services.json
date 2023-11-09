@@ -9,7 +9,9 @@
   },
   "drone_video": {
     "base_price": 50,
-    "customer_branded": 10,
-    "scenic_footage": 20
+    "options": {
+      "customer_branded": 10,
+      "scenic_footage": 20
+    }
   }
 }
