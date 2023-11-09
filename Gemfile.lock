@@ -21,6 +21,7 @@ GEM
     bigdecimal (3.1.4)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
+    diff-lcs (1.5.0)
     drb (2.2.0)
       ruby2_keywords
     i18n (1.14.1)
@@ -32,6 +33,19 @@ GEM
     rack (2.2.8)
     rack-protection (3.1.0)
       rack (~> 2.2, >= 2.2.4)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.2)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.6)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.1)
     ruby2_keywords (0.0.5)
     sinatra (3.1.0)
       mustermann (~> 3.0)
@@ -52,6 +66,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   rack (~> 2.2)
+  rspec (~> 3.12)
   sinatra-activerecord
 
 BUNDLED WITH

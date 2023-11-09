@@ -33,6 +33,8 @@ class Quote
     @services_unavailable
   end
 
+  
+
   private
   def populate_single_service(klass, req_service)
     total = klass.total_price(req_service["quantity"], req_service["extras"])
@@ -45,12 +47,16 @@ class Quote
 
   def populate_line_items
     line_items = []
+
+    # resets services_unavailable to empty everytime this method is called
+    @services_unavailable = []
     @requested_services.each do |requested_service|
       service_name = requested_service["service"]
       next unless service_name
   
       begin
         klass = klass_assign(service_name)
+
         line_item = populate_single_service(klass, requested_service)
         @subtotal += line_item[:total]
         line_items << line_item
@@ -60,4 +66,6 @@ class Quote
     end
     line_items
   end
+
+  
 end
