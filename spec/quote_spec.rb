@@ -26,7 +26,11 @@ describe Quote do
 
     it 'when all services are valid, returns an array of line items' do
       line_items = quote.send(:populate_line_items)
-      expect(line_items).to eql([{:quantity=>5, :service=>"photo_retouching", :total=>15.0}, {:quantity=>1, :service=>"floor_plan", :total=>15}, {:quantity=>1, :service=>"drone_video", :total=>50}])
+      expect(line_items).to eql([
+        {:quantity=>5, :service=>"photo_retouching", :total=>15.0}, 
+        {:quantity=>1, :service=>"floor_plan", :total=>15}, 
+        {:quantity=>1, :service=>"drone_video", :total=>50}
+      ])
 
     end
 
@@ -36,7 +40,8 @@ describe Quote do
       
       line_items = quote.send(:populate_line_items)
       expect(line_items).to eql([
-        {:quantity=>5, :service=>"photo_retouching", :total=>15.0}, {:quantity=>1, :service=>"floor_plan", :total=>15}, 
+        {:quantity=>5, :service=>"photo_retouching", :total=>15.0},
+        {:quantity=>1, :service=>"floor_plan", :total=>15}, 
         {:quantity=>1, :service=>"drone_video", :total=>50}
       ])
       expect(quote.services_unavailable).to eql([])
@@ -44,13 +49,14 @@ describe Quote do
       puts quote.services_unavailable
     end
 
-    it 'when some services are invalid, ignore them' do
+    it 'when some services are not available, ignore them. And add it to the service_unavailable array' do
       requested_services << { "service" => "world" }
       quote = Quote.new(requested_services)
       
       line_items = quote.send(:populate_line_items)
       expect(line_items).to eql([
-        {:quantity=>5, :service=>"photo_retouching", :total=>15.0}, {:quantity=>1, :service=>"floor_plan", :total=>15}, 
+        {:quantity=>5, :service=>"photo_retouching", :total=>15.0}, 
+        {:quantity=>1, :service=>"floor_plan", :total=>15}, 
         {:quantity=>1, :service=>"drone_video", :total=>50}
       ])
       expect(quote.services_unavailable).to eql(["world"])
