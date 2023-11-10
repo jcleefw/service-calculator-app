@@ -61,9 +61,11 @@ class Quote
       begin
         klass = klass_assign(service_name)
 
-        line_item = populate_single_service(klass, sanitized)
-        @subtotal += line_item[:total]
-        line_items << line_item
+        if sanitized[:quantity] > 0
+          line_item = populate_single_service(klass, sanitized)
+          @subtotal += line_item[:total]
+          line_items << line_item
+        end
       rescue 
         @services_unavailable << service_name
       end

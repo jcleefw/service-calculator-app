@@ -71,5 +71,31 @@ describe Quote do
       expect(quote.services_unavailable).to be_empty
 
     end
+
+    it 'when some services quantity is 0, do not return them into line_items' do
+      quote = Quote.new([
+        {
+          "service"=> "photo_retouching",
+          "extras"=> ["background_removal"],
+          "quantity"=> 5
+        },
+        {
+          "service"=> "floor_plan",
+          "extras"=> [],
+          "quantity"=> 0
+        },
+        {
+          "service"=> "drone_video",
+          "extras"=> ["branded", "scenic"],
+          "quantity"=> 0
+        }
+      ])
+      
+      line_items = quote.send(:populate_line_items)
+      expect(line_items).to eql([{:quantity=>5, :service=>"photo_retouching", :total=>15.0}])
+      expect(quote.line_items_count).to eql(1)
+      expect(quote.services_unavailable).to be_empty
+
+    end
   end
 end
