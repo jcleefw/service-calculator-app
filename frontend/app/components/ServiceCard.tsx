@@ -32,11 +32,15 @@ const ServiceCard = ({
         labelFor={`${formName}.${serviceName}.quantity`}
       >
         <input
-          type="number"
+          type="text"
           name={`${formName}.${serviceName}.quantity`}
           id={`${formName}.${serviceName}.quantity`}
           required
           defaultValue={0}
+          // stop user from entering the char `e` or `i`
+          onKeyDown={(evt) =>
+            ['e', '.'].includes(evt.key) && evt.preventDefault()
+          }
         />
       </FormField>
 

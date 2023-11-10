@@ -6,9 +6,6 @@ export const buildFormData = (formData: FormData): ServiceRequestItem[] => {
   // Convert FormData to a plain object
   formData.forEach((fieldValue, key) => {
     const [_, serviceName, propName, option_name] = key.split('.')
-    // TODO: Hacky way to ensure that quantity is a integer. There's definitely better to do this
-    const sanitizedValue =
-      propName === 'quantity' ? Number(fieldValue) : fieldValue
 
     if (!formValues[serviceName]) {
       formValues[serviceName] = {
@@ -20,13 +17,13 @@ export const buildFormData = (formData: FormData): ServiceRequestItem[] => {
       if (propName === 'options') {
         formValues[serviceName]['extras'] = [option_name]
       } else {
-        formValues[serviceName][propName] = sanitizedValue
+        formValues[serviceName][propName] = fieldValue
       }
     } else {
       if (propName === 'options') {
         formValues[serviceName]['extras'].push(option_name)
       } else {
-        formValues[serviceName][propName] = sanitizedValue
+        formValues[serviceName][propName] = fieldValue
       }
     }
   })
