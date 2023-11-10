@@ -37,7 +37,7 @@ const ServiceCard = ({
           id={`${formName}.${serviceName}.quantity`}
           required
           defaultValue={0}
-          // stop user from entering the char `e` or `i`
+          // stop user from entering the char `e` or `.`
           onKeyDown={(evt) =>
             ['e', '.'].includes(evt.key) && evt.preventDefault()
           }
