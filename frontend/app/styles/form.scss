@@ -1,6 +1,6 @@
 input[type='text'],
 input[type='number'] {
-  @apply border-gray-600 border h-10 px-4;
+  @apply border-gray-600 border h-10 px-4 dark:bg-inherit;
 }
 
 input[type='checkbox'] {

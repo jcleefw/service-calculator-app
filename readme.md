@@ -15,3 +15,13 @@ rspec
 - All currency will be hardcoded to `AUD`
 - When there is duplication in the service requested, it will be treated as a separate object instead of combining them into 1 object
 - Only some unit test are written. Mostly for methods that does more computation.
+
+
+---
+
+## Start FE Next application
+```bash
+  cd frontend
+
+  npm run dev
+```

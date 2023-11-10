@@ -31,7 +31,7 @@ main {
   display: flex;
   flex-direction: row;
   min-height: 100vh;
-  @apply flex flex-col items-center contained p-12 bg-white;
+  @apply flex flex-col items-center contained p-12;
 }
 
 h1 {
