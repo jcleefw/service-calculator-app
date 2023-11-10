@@ -1,5 +1,6 @@
 require_relative 'helpers'
 class Quote 
+
   def initialize(requested_services)
     @requested_services = requested_services
     @subtotal = 0
@@ -37,10 +38,11 @@ class Quote
 
   private
   def populate_single_service(klass, req_service)
-    total = klass.total_price(req_service["quantity"], req_service["extras"])
+    total = klass.total_price(req_service[:quantity], req_service[:extras])
+    
     {
-      service: req_service["service"],
-      quantity: req_service["quantity"],
+      service: req_service[:service],
+      quantity: req_service[:quantity],
       total: total
     }
   end
@@ -51,13 +53,15 @@ class Quote
     # resets services_unavailable to empty everytime this method is called
     @services_unavailable = []
     @requested_services.each do |requested_service|
-      service_name = requested_service["service"]
+      sanitized = sanitize(requested_service)
+
+      service_name = sanitized[:service]
       next unless service_name
   
       begin
         klass = klass_assign(service_name)
 
-        line_item = populate_single_service(klass, requested_service)
+        line_item = populate_single_service(klass, sanitized)
         @subtotal += line_item[:total]
         line_items << line_item
       rescue 
@@ -67,5 +71,16 @@ class Quote
     line_items
   end
 
-  
+  def sanitize item
+    # convert item to integer
+    input_quantity = sanitize_to_integer item["quantity"]
+
+    # if extras is not an array return empty array
+    option = item["extras"].is_a?(Array) ? item["extras"] : []
+
+    # ensure if service is empty string return nil
+    service = item["service"].is_a?(String) && !item["service"].empty? ? item["service"] : nil
+    
+    return { quantity: input_quantity, extras: option, service: service}
+  end
 end

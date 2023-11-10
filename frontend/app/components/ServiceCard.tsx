@@ -22,16 +22,19 @@ const ServiceCard = ({
 
       <input
         type="hidden"
-        name={`${formName}[${idx}].service`}
-        id={`${formName}[${idx}].service`}
+        name={`${formName}.${serviceName}.service`}
+        id={`${formName}.${serviceName}.service`}
         value={serviceName}
       />
 
-      <FormField labelText="Quantity" labelFor={`${formName}[${idx}].quantity`}>
+      <FormField
+        labelText="Quantity"
+        labelFor={`${formName}.${serviceName}.quantity`}
+      >
         <input
           type="number"
-          name={`${formName}[${idx}].quantity`}
-          id={`${formName}[${idx}].quantity`}
+          name={`${formName}.${serviceName}.quantity`}
+          id={`${formName}.${serviceName}.quantity`}
           required
           defaultValue={0}
         />
@@ -42,13 +45,13 @@ const ServiceCard = ({
           serviceOptions.map((opt) => (
             <FormField
               labelText={transformTextToSentence(opt.label)}
-              labelFor={`${formName}[${idx}].options.${opt.value}`}
-              key={`${idx}.options.${opt.value}`}
+              labelFor={`${formName}.${serviceName}.options.${opt.label}`}
+              key={`${serviceName}.options.${opt.label}`}
             >
               <input
                 type="checkbox"
-                name={`${formName}[${idx}].options.${opt.value}`}
-                id={`${formName}[${idx}].options.${opt.value}`}
+                name={`${formName}.${serviceName}.options.${opt.label}`}
+                id={`${formName}.${serviceName}.options.${opt.label}`}
               />
             </FormField>
           ))}

@@ -10,3 +10,14 @@ def klass_assign(class_name)
   raise ServiceUnavailableError, class_name if klass.nil?
   klass.new
 end
+
+def sanitize_to_integer input
+  if(input.is_a?(Numeric)) 
+    quantity = input
+  elsif(input.is_a?(String)) 
+    quantity = input.to_i
+  else
+    quantity = 0
+  end
+  quantity
+end

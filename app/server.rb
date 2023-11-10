@@ -1,9 +1,15 @@
 require 'sinatra'
+require "sinatra/cors"
 require_relative 'helpers'
 require_relative 'quote'
 
-
 class App < Sinatra::Base
+  register Sinatra::Cors
+
+  set :allow_origin, '*'
+  set :allow_methods, 'POST'
+  set :allow_headers, 'Content-Type, access-control-allow-methods, access-control-allow-origin, access-control-allow-headers'
+
   get '/' do
     'Welcome to Sinatra app!'
   end
