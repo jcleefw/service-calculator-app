@@ -1,5 +1,4 @@
 import QuoteForm from './components/QuoteForm'
-import ServiceCard from './components/ServiceCard'
 import { ServiceProps } from './types/service'
 
 const getServices = async () => {

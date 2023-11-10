@@ -1,0 +1,11 @@
+.quotation {
+  @apply flex flex-col gap-8;
+}
+
+.quotation-summary {
+  @apply grid grid-cols-2;
+
+  > .q-label {
+    @apply text-right pr-6;
+  }
+}

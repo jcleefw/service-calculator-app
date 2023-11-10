@@ -2,8 +2,10 @@
 import { POST, PostResponse } from '@/app/api/quote/route'
 import { ServiceProps } from '@/app/types/service'
 import { buildFormData } from '@/app/utils/buildFormData'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import FormContent from './FormContent'
+import QuotationView from '../QuotationView'
+import { QuotationResponseProps } from '@/app/types/quote'
 
 type QuoteFormProps = {
   formName: string
@@ -19,7 +21,10 @@ const postFormData = async (formData: any) => {
 
 const QuoteForm = ({ formName, services }: QuoteFormProps) => {
   const [quotation, setQuotation] = useState<Record<string, any> | null>(null)
+  // TODO: move this a level up
   const [errors, setErrors] = useState<string | null>(null)
+
+  const formRef = useRef<HTMLFormElement | null>(null)
 
   const handleClick = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -36,11 +41,39 @@ const QuoteForm = ({ formName, services }: QuoteFormProps) => {
     }
   }
 
+  const handleReset = () => {
+    setErrors(null)
+    setQuotation(null)
+
+    if (formRef.current) formRef.current.reset()
+  }
+
+  const hasResponse = quotation || errors
+
   return (
-    <form name={formName} onSubmit={handleClick}>
-      <FormContent formName={formName} services={services} />
-      <button type="submit">Get quote</button>
-    </form>
+    <>
+      {quotation && (
+        <QuotationView
+          data={quotation as QuotationResponseProps}
+          onReset={handleReset}
+        />
+      )}
+      {!hasResponse && (
+        <form
+          ref={formRef}
+          name={formName}
+          onSubmit={handleClick}
+          onReset={handleReset}
+        >
+          <FormContent formName={formName} services={services} />
+          <div className="flex flex-row gap-2">
+            <button type="submit">Get quote</button>
+            <button type="reset">Reset Form</button>
+          </div>
+        </form>
+      )}
+      {errors && <div className="error">{errors}</div>}
+    </>
   )
 }
 
