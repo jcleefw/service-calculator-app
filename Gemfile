@@ -8,3 +8,5 @@ gem 'sinatra-activerecord', :require => 'sinatra/activerecord'
 gem "rack", "~> 2.2"
 
 gem "rspec", "~> 3.12"
+
+gem "sinatra-cors", "~> 1.2"

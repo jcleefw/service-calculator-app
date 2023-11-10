@@ -55,6 +55,7 @@ GEM
     sinatra-activerecord (2.0.27)
       activerecord (>= 4.1)
       sinatra (>= 1.0)
+    sinatra-cors (1.2.0)
     tilt (2.3.0)
     timeout (0.4.1)
     tzinfo (2.0.6)
@@ -68,6 +69,7 @@ DEPENDENCIES
   rack (~> 2.2)
   rspec (~> 3.12)
   sinatra-activerecord
+  sinatra-cors (~> 1.2)
 
 BUNDLED WITH
    2.4.10
