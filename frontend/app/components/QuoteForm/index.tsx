@@ -1,6 +1,6 @@
 'use client'
 import { POST, PostResponse } from '@/app/api/quote/route'
-import { ServiceProps } from '@/app/types/service'
+import { ServiceProps, ServiceRequestItem } from '@/app/types/service'
 import { buildFormData } from '@/app/utils/buildFormData'
 import React, { useRef, useState } from 'react'
 import FormContent from './FormContent'
@@ -13,10 +13,7 @@ type QuoteFormProps = {
 }
 
 const postFormData = async (formData: any) => {
-  const res = await POST(formData)
-  console.log(res)
-
-  return res
+  return await POST(formData)
 }
 
 const QuoteForm = ({ formName, services }: QuoteFormProps) => {

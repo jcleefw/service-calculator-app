@@ -28,7 +28,6 @@ export default async function Home() {
       </main>
     )
   } else {
-    // TODO create UI to handle when server is down
     return (
       <main>
         <h1>Server is currently down. Try again later</h1>
