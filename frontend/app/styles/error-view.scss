@@ -1,0 +1,11 @@
+.error {
+  @apply w-[500px] mb-8 p-2 card bg-red-200;
+
+  h3 {
+    @apply text-gray-700;
+  }
+  li {
+    @apply text-sm list-inside;
+    list-style-type: circle;
+  }
+}
