@@ -59,3 +59,12 @@ There's definitely more work that needs to be done on the FE code. The current s
 - responsive pages
 - tidier styling and consistencies
 - add some form validation with yup validation
+
+
+-- 
+
+## Breakdown of Task
+I've used github issues to create tickets for task required.
+
+**To see tickets:**
+https://github.com/jcleefw/service-calculator-app/issues
